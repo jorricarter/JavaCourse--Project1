@@ -133,9 +133,11 @@ public class Main {
                     }
                     //if computer went first, playe lowest card ignoring suit and it is the current winning card
                     if (player==1) {
-                        winningCard = allPlayers.get(currentPlayer).playCard(lowestCard);
+                        playedCard = allPlayers.get(currentPlayer).playCard(lowestCard);
                         //use words to tell the user what was played
-                        System.out.println("Player " + currentPlayer + " played the " + winningCard.name + " of "+winningCard.suit+"!");
+                        System.out.println("Player " + currentPlayer + " played the " + playedCard.name + " of "+playedCard.suit+"!");
+                        //since computer went first, its card is automatically the current winning card
+                        winningCard = playedCard;
                         //if computer didnt go first, compare suit and value to determine if computer is new current winner
                     }else{
                         //if lowest suited card is not default"10" play it, otherwise, it cannot win the trick/book/stack
@@ -151,7 +153,7 @@ public class Main {
                         }else playedCard = allPlayers.get(currentPlayer).playCard(lowestCard);
                     }
                 //display what card was played for user to know what's going on
-                    System.out.println("Player "+currentPlayer+" played the "+playedCard.name+"!");
+                    System.out.println("Player "+currentPlayer+" played the "+playedCard.name+" of "+playedCard.suit+"!");
                 }
                 //change current player to next player
                 if (currentPlayer == quantPlayers) currentPlayer = 1;
