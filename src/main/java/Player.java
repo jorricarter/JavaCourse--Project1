@@ -11,7 +11,7 @@ public class Player {
         //for each card, print card name.
         for (int cardIndex = 0; cardIndex < this.hand.size(); cardIndex++){
             //each card with a number for selecting and on separate lines for readability since I won't have time to add method for sorting them.
-            System.out.print(cardIndex);
+            System.out.print(cardIndex+" - ");
             //this should print on same line since previous line used print instead of println
             this.getHand().get(cardIndex).cardName();
         }

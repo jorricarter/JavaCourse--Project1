@@ -6,7 +6,7 @@ public class Main {
     //get player input
     private static Scanner newScanner = new Scanner(System.in);
     //get numerical input
-   // private static int intInput = newScanner.nextInt();
+// private static int intInput = newScanner.nextInt();
     //keep track of number of players
     private static int quantPlayers;
     private static ArrayList<Player> allPlayers = new ArrayList<>();
@@ -84,10 +84,11 @@ public class Main {
         //loop through all 6 rounds
         for (int rounds = 6; rounds > 0; rounds--){
             //loop through each player
-            for (int player = quantPlayers; player > 0; player--){
+            for (int player = 1; player <= quantPlayers; player++){
                 //what to do if it's player's turn
                 if (currentPlayer == 1) {
                     //show player their cards to choose from
+                    System.out.println("Your cards are: ");
                     allPlayers.get(1).lookAtHand();
                     //get selection from player
                     System.out.println("Which card would you like to play?");
@@ -95,7 +96,7 @@ public class Main {
                     //play selected card
                     playedCard = allPlayers.get(1).playCard(handSelection);
                     //if (first player to play card) {it is currently winning card by default};
-                    if (player==1) winningCard = playedCard;
+                    if (player==1) {winningCard = playedCard;}
                     //since there is already a card played (compare to winning card)
                     if (playedCard.suit.equals(winningCard.suit) && playedCard.value>winningCard.value) {
                         //since card won, it is the new current winning card!
@@ -115,9 +116,9 @@ public class Main {
                     //computer will compare each card to find the lowest values
                     for (int handIndex = 0; handIndex<currentHand.size(); handIndex++){
                         //if the next card is lower than the lowest card, remember it.
-                        if (currentHand.get(handIndex).value<currentHand.get(lowestCard).value)lowestCard = handIndex;
+                        if (currentHand.get(handIndex).value<currentHand.get(lowestCard).value){lowestCard = handIndex;}
                         //if computer is first to go, don't check for suits.
-                        if (player==1) continue;
+                        if (player==1){ continue;}
                         //what to do if card is not first played this round;
                         else {
                             //if (card is the correct suit AND value is lowest among that suit)
@@ -134,7 +135,7 @@ public class Main {
                     if (player==1) {
                         winningCard = allPlayers.get(currentPlayer).playCard(lowestCard);
                         //use words to tell the user what was played
-                        System.out.println("Player " + currentPlayer + " played " + winningCard.name + "!");
+                        System.out.println("Player " + currentPlayer + " played the " + winningCard.name + " of "+winningCard.suit+"!");
                         //if computer didnt go first, compare suit and value to determine if computer is new current winner
                     }else{
                         //if lowest suited card is not default"10" play it, otherwise, it cannot win the trick/book/stack
