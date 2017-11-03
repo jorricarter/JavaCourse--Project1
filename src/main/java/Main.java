@@ -74,93 +74,100 @@ public class Main {
             allPlayers.get(currentPlayer).addToHand(deck.dealCard());
             allPlayers.get(currentPlayer).addToHand(deck.dealCard());
             //if current player would exceed number of players, start over with player 1.
-            if (currentPlayer == quantPlayers) currentPlayer = 1;
-            else currentPlayer++;
+            advanceTurn();
         }
         //display hand
         System.out.println("Your cards are: ");
         //since I created an extra player, index 1 is player 1
         allPlayers.get(1).lookAtHand();
-        //loop through all 6 rounds
+        playGame();
+        System.out.println("Player "+firstPlayer+" won the game!");
+    }
+    public static void advanceTurn(){
+        if (currentPlayer == quantPlayers) currentPlayer = 1;
+        else currentPlayer++;
+    }
+    public static void playGame(){        //loop through all 6 rounds
         for (int rounds = 6; rounds > 0; rounds--){
             //loop through each player
             for (int player = 1; player <= quantPlayers; player++){
                 //what to do if it's player's turn
-                if (currentPlayer == 1) {
-                    //show player their cards to choose from
-                    System.out.println("Your cards are: ");
-                    allPlayers.get(1).lookAtHand();
-                    //get selection from player
-                    System.out.println("Which card would you like to play?");
-                    int handSelection = newScanner.nextInt();
-                    //play selected card
-                    playedCard = allPlayers.get(1).playCard(handSelection);
-                    //if (first player to play card) {it is currently winning card by default};
-                    if (player==1) {winningCard = playedCard;}
-                    //since there is already a card played (compare to winning card)
-                    if (playedCard.suit.equals(winningCard.suit) && playedCard.value>winningCard.value) {
-                        //since card won, it is the new current winning card!
-                        winningCard = playedCard;
-                        //since card won, the player is the new current winner of the book/stack/trick
-                        firstPlayer = currentPlayer;
-                    }
-                }
+                if (currentPlayer == 1) playerTurn();
                 //since it's not the user's turn, let the computer play
-                else {
-                    //make computer look at it's hand
-                    ArrayList<Card> currentHand = allPlayers.get(currentPlayer).getHand();
-                    //computer will will look at one card at a time starting with the first
-                    int lowestCard = 0;
-                    //when the computer finds cards of the necessary suit, they will remember them here.
-                    int lowestSuited = 10;
-                    //computer will compare each card to find the lowest values
-                    for (int handIndex = 0; handIndex<currentHand.size(); handIndex++){
-                        //if the next card is lower than the lowest card, remember it.
-                        if (currentHand.get(handIndex).value<currentHand.get(lowestCard).value){lowestCard = handIndex;}
-                        //if computer is first to go, don't check for suits.
-                        if (player==1){ continue;}
-                        //what to do if card is not first played this round;
-                        else {
-                            //if (card is the correct suit AND value is lowest among that suit)
-                            if (currentHand.get(handIndex).suit.equals(winningCard.suit)){
-                                //if lowest suited is default"10" or less than thiscard, this card is new lowest suited;
-                                if (lowestSuited==10 || currentHand.get(handIndex).value<currentHand.get(lowestSuited).value){
-                                    //current card is new lowest suited
-                                    lowestSuited = handIndex;
-                                }
-                            }
-                        }
-                    }
-                    //if computer went first, playe lowest card ignoring suit and it is the current winning card
-                    if (player==1) {
-                        playedCard = allPlayers.get(currentPlayer).playCard(lowestCard);
-                        //use words to tell the user what was played
-                        System.out.println("Player " + currentPlayer + " played the " + playedCard.name + " of "+playedCard.suit+"!");
-                        //since computer went first, its card is automatically the current winning card
-                        winningCard = playedCard;
-                        //if computer didnt go first, compare suit and value to determine if computer is new current winner
-                    }else{
-                        //if lowest suited card is not default"10" play it, otherwise, it cannot win the trick/book/stack
-                        if (lowestSuited!=10) {
-                            playedCard = allPlayers.get(currentPlayer).playCard(lowestSuited);
-                            //"since suit matches" check if (new card is higher);
-                            if (playedCard.value>winningCard.value){
-                                //"since new card is higher"{new card is winning card;this player is winning player};
-                                winningCard=playedCard;
-                                firstPlayer=currentPlayer;
-                            }
-                        //since suit doesn't match, dont compare values
-                        }else playedCard = allPlayers.get(currentPlayer).playCard(lowestCard);
-                    }
-                //display what card was played for user to know what's going on
-                    System.out.println("Player "+currentPlayer+" played the "+playedCard.name+" of "+playedCard.suit+"!");
-                }
+                else {computerTurn();}
                 //change current player to next player
-                if (currentPlayer == quantPlayers) currentPlayer = 1;
-                else currentPlayer++;
+                advanceTurn();
             }
             System.out.println("Player "+firstPlayer+" won the round!");
         }
-        System.out.println("Player "+firstPlayer+" won the game!");
+    }
+    public static void playerTurn(){
+        //show player their cards to choose from
+        System.out.println("Your cards are: ");
+        allPlayers.get(1).lookAtHand();
+        //get selection from player
+        System.out.println("Which card would you like to play?");
+        int handSelection = newScanner.nextInt();
+        //play selected card
+        playedCard = allPlayers.get(1).playCard(handSelection);
+        //if (first player to play card) {it is currently winning card by default};
+        if (player==1) {winningCard = playedCard;}
+        //since there is already a card played (compare to winning card)
+        if (playedCard.suit.equals(winningCard.suit) && playedCard.value>winningCard.value) {
+            //since card won, it is the new current winning card!
+            winningCard = playedCard;
+            //since card won, the player is the new current winner of the book/stack/trick
+            firstPlayer = currentPlayer;
+        }
+
+    }
+    public static void computerTurn(){
+        //make computer look at it's hand
+        ArrayList<Card> currentHand = allPlayers.get(currentPlayer).getHand();
+        //computer will will look at one card at a time starting with the first
+        int lowestCard = 0;
+        //when the computer finds cards of the necessary suit, they will remember them here.
+        int lowestSuited = 10;
+        //computer will compare each card to find the lowest values
+        for (int handIndex = 0; handIndex<currentHand.size(); handIndex++){
+            //if the next card is lower than the lowest card, remember it.
+            if (currentHand.get(handIndex).value<currentHand.get(lowestCard).value){lowestCard = handIndex;}
+            //if computer is first to go, don't check for suits.
+            if (player==1){ continue;}
+            //what to do if card is not first played this round;
+            else {
+                //if (card is the correct suit AND value is lowest among that suit)
+                if (currentHand.get(handIndex).suit.equals(winningCard.suit)){
+                    //if lowest suited is default"10" or less than thiscard, this card is new lowest suited;
+                    if (lowestSuited==10 || currentHand.get(handIndex).value<currentHand.get(lowestSuited).value){
+                        //current card is new lowest suited
+                        lowestSuited = handIndex;
+                    }
+                }
+            }
+        }
+        //if computer went first, playe lowest card ignoring suit and it is the current winning card
+        if (player==1) {
+            playedCard = allPlayers.get(currentPlayer).playCard(lowestCard);
+            //use words to tell the user what was played
+            System.out.println("Player " + currentPlayer + " played the " + playedCard.name + " of "+playedCard.suit+"!");
+            //since computer went first, its card is automatically the current winning card
+            winningCard = playedCard;
+            //if computer didnt go first, compare suit and value to determine if computer is new current winner
+        }else{
+            //if lowest suited card is not default"10" play it, otherwise, it cannot win the trick/book/stack
+            if (lowestSuited!=10) {
+                playedCard = allPlayers.get(currentPlayer).playCard(lowestSuited);
+                //"since suit matches" check if (new card is higher);
+                if (playedCard.value>winningCard.value){
+                    //"since new card is higher"{new card is winning card;this player is winning player};
+                    winningCard=playedCard;
+                    firstPlayer=currentPlayer;
+                }
+                //since suit doesn't match, dont compare values
+            }else playedCard = allPlayers.get(currentPlayer).playCard(lowestCard);
+        }
+        //display what card was played for user to know what's going on
+        System.out.println("Player "+currentPlayer+" played the "+playedCard.name+" of "+playedCard.suit+"!");
     }
 }
