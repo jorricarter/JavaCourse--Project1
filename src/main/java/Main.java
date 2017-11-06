@@ -92,22 +92,32 @@ public class Main {
             //loop through each player
             for (int player = 1; player <= quantPlayers; player++){
                 //what to do if it's player's turn
-                if (currentPlayer == 1) playerTurn();
+                if (currentPlayer == 1) playerTurn(player);
                 //since it's not the user's turn, let the computer play
-                else {computerTurn();}
+                else {computerTurn(player);}
                 //change current player to next player
                 advanceTurn();
             }
+            //tell who the winner is
             System.out.println("Player "+firstPlayer+" won the round!");
+            //make the winner go first this round
+            currentPlayer = firstPlayer;
         }
     }
-    public static void playerTurn(){
-        //show player their cards to choose from
-        System.out.println("Your cards are: ");
-        allPlayers.get(1).lookAtHand();
-        //get selection from player
-        System.out.println("Which card would you like to play?");
-        int handSelection = newScanner.nextInt();
+    public static void playerTurn(int player){
+        //initialize value to exist after loop
+        int handSelection = -1;
+        //while (user didnt pick a valid card) {keep asking}
+        while(true){
+            //show player their cards to choose from
+            System.out.println("Your cards are: ");
+            allPlayers.get(1).lookAtHand();
+            //get selection from player
+            System.out.println("Which card would you like to play?");
+            handSelection = newScanner.nextInt();
+            // if (cardSelection is in hand) {end loop};
+            if ((handSelection > -1) && (handSelection < allPlayers.get(1).getHandSize()))break;
+        }
         //play selected card
         playedCard = allPlayers.get(1).playCard(handSelection);
         //if (first player to play card) {it is currently winning card by default};
@@ -121,7 +131,7 @@ public class Main {
         }
 
     }
-    public static void computerTurn(){
+    public static void computerTurn(int player){
         //make computer look at it's hand
         ArrayList<Card> currentHand = allPlayers.get(currentPlayer).getHand();
         //computer will will look at one card at a time starting with the first
@@ -149,8 +159,6 @@ public class Main {
         //if computer went first, playe lowest card ignoring suit and it is the current winning card
         if (player==1) {
             playedCard = allPlayers.get(currentPlayer).playCard(lowestCard);
-            //use words to tell the user what was played
-            System.out.println("Player " + currentPlayer + " played the " + playedCard.name + " of "+playedCard.suit+"!");
             //since computer went first, its card is automatically the current winning card
             winningCard = playedCard;
             //if computer didnt go first, compare suit and value to determine if computer is new current winner

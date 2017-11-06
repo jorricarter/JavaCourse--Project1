@@ -6,6 +6,8 @@ public class Player {
 //get methods
     //get/look at cards in hand
     public ArrayList<Card> getHand(){return hand;}
+    //get hand size to see if player chose a card in hand. "if only 7 cards and player chooses card number 11, it is not a valid selection."
+    public int getHandSize(){return hand.size();}
     //to show hand to user
     public void lookAtHand(){
         //for each card, print card name.
