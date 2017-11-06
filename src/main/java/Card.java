@@ -1,11 +1,11 @@
 
-public class Card {
+class Card {
     //each card has a suit
-    public String suit;
+    String suit;
     //each card has a value <11 is ace>
-    public int value;
+    int value;
     //card name will equal value unless it's an 11"ace"
-    public String name;
+    String name;
     Card (String suit, int value) {
         this.suit = suit;
         this.value = value;
@@ -14,7 +14,7 @@ public class Card {
         else this.name = Integer.toString(value);
     }
     //for printing names of cards in hand
-    public void cardName(){
+    void cardName(){
         //print name<value> and suit.
         System.out.println(this.name+" of "+this.suit);
     }

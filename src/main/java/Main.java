@@ -12,7 +12,6 @@ public class Main {
     private static ArrayList<Player> allPlayers = new ArrayList<>();
     //keep track of who's turn it is
     private static int currentPlayer;
-    private static int dealerPlayer;
     //keep track of who plays first next round and to determine winner of last round.
     private static int firstPlayer;
     //track current card being played to compare it to current winning card.
@@ -46,7 +45,7 @@ public class Main {
         //randomly; select dealer
         Random rand = new Random();
         //select dealer = "since random number will be between 0 and quantPlayer-1" + 1
-        dealerPlayer = rand.nextInt(quantPlayers)+1;
+        int dealerPlayer = rand.nextInt(quantPlayers) + 1;
         //"first player will be to the left of the dealer" if (dealer is last player) {firstPlayer is player 1};
         if (dealerPlayer == quantPlayers) firstPlayer = 1;
         //since dealer isn't last player in quantPlayers {firstPlayer is the player after dealer};
@@ -68,7 +67,7 @@ public class Main {
         //deal cards(deal twice to each player){deal 3 cards at a time}
         for (int dealing=1; dealing<=(quantPlayers*2); dealing++){
             //add pauses in between dealing cards
-            System.out.println("Player "+dealerPlayer+" dealt 3 cards to player "+currentPlayer);
+            System.out.println("Player "+ dealerPlayer +" dealt 3 cards to player "+currentPlayer);
             //deal cards to player hands.
             allPlayers.get(currentPlayer).addToHand(deck.dealCard());
             allPlayers.get(currentPlayer).addToHand(deck.dealCard());
@@ -83,18 +82,18 @@ public class Main {
         playGame();
         System.out.println("Player "+firstPlayer+" won the game!");
     }
-    public static void advanceTurn(){
+    private static void advanceTurn(){
         if (currentPlayer == quantPlayers) currentPlayer = 1;
         else currentPlayer++;
     }
-    public static void playGame(){        //loop through all 6 rounds
+    private static void playGame(){        //loop through all 6 rounds
         for (int rounds = 6; rounds > 0; rounds--){
             //loop through each player
             for (int player = 1; player <= quantPlayers; player++){
                 //what to do if it's player's turn
                 if (currentPlayer == 1) playerTurn(player);
                 //since it's not the user's turn, let the computer play
-                else {computerTurn(player);}
+                else computerTurn(player);
                 //change current player to next player
                 advanceTurn();
             }
@@ -104,9 +103,9 @@ public class Main {
             currentPlayer = firstPlayer;
         }
     }
-    public static void playerTurn(int player){
+    private static void playerTurn(int player){
         //initialize value to exist after loop
-        int handSelection = -1;
+        int handSelection;
         //while (user didnt pick a valid card) {keep asking}
         while(true){
             //show player their cards to choose from
@@ -131,7 +130,7 @@ public class Main {
         }
 
     }
-    public static void computerTurn(int player){
+    private static void computerTurn(int player){
         //make computer look at it's hand
         ArrayList<Card> currentHand = allPlayers.get(currentPlayer).getHand();
         //computer will will look at one card at a time starting with the first
@@ -141,19 +140,11 @@ public class Main {
         //computer will compare each card to find the lowest values
         for (int handIndex = 0; handIndex<currentHand.size(); handIndex++){
             //if the next card is lower than the lowest card, remember it.
-            if (currentHand.get(handIndex).value<currentHand.get(lowestCard).value){lowestCard = handIndex;}
-            //if computer is first to go, don't check for suits.
-            if (player==1){ continue;}
-            //what to do if card is not first played this round;
-            else {
-                //if (card is the correct suit AND value is lowest among that suit)
-                if (currentHand.get(handIndex).suit.equals(winningCard.suit)){
-                    //if lowest suited is default"10" or less than thiscard, this card is new lowest suited;
-                    if (lowestSuited==10 || currentHand.get(handIndex).value<currentHand.get(lowestSuited).value){
-                        //current card is new lowest suited
-                        lowestSuited = handIndex;
-                    }
-                }
+            if (currentHand.get(handIndex).value<currentHand.get(lowestCard).value) lowestCard = handIndex;
+            //if ((current card's suit matches required suit for the round) && (haven't found a card in this suit || this is the lowest value card of this suit)
+            if ((currentHand.get(handIndex).suit.equals(winningCard.suit)) && (lowestSuited==10 || currentHand.get(handIndex).value<currentHand.get(lowestSuited).value)) {
+                //current card is new lowest suited
+                lowestSuited = handIndex;
             }
         }
         //if computer went first, playe lowest card ignoring suit and it is the current winning card
