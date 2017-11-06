@@ -5,8 +5,6 @@ import java.util.Random;
 public class Main {
     //get player input
     private static Scanner newScanner = new Scanner(System.in);
-    //get numerical input
-// private static int intInput = newScanner.nextInt();
     //keep track of number of players
     private static int quantPlayers;
     private static ArrayList<Player> allPlayers = new ArrayList<>();
